@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSINT Tool - MR WEIRDO</title>
+  <style>
+    body {
+      background: #000;
+      color: #00eaff;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 15px #00eaff;
+      text-align: center;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      justify-items: center;
+      margin-bottom: 50px;
+      width: 90%;
+      max-width: 800px;
+    }
+    .buttons button {
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      background: #00eaff;
+      color: #000;
+      cursor: pointer;
+      transition: 0.3s;
+      width: 100%;
+      max-width: 200px;
+    }
+    .buttons button:hover {
+      background: #00bcd4;
+    }
+    @media (max-width: 600px) {
+      .buttons {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 400px) {
+      .buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>💻 OSINT TOOL - BY MR A B H I </h1>
+
+  <div class="buttons">
+    <button onclick="redirect('num.html')">NUMBER INFO</button>
+    <button onclick="redirect('adhar.html')">AADHAR INFO</button>
+    <button onclick="redirect('upi.html')">UPI ID INFO</button>
+    <button onclick="redirect('vehicle.html')">VEHICLE INFO</button>
+    <button onclick="redirect('imei.html')">IMEI INFO</button>
+    <button onclick="redirect('pincode.html')">PINCODE INFO</button>
+    <button onclick="redirect('ip.html')">IP INFO</button>
+    <button onclick="redirect('ifsc.html')">IFSC INFO</button>
+  </div>
+
+  <script>
+    function redirect(page) {
+      window.location.href = page;
+    }
+  </script>
+</body>
+</html>

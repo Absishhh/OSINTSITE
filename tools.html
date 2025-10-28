@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MR A B H I  — Tools</title>
+<style>
+:root{
+  --bg:#020204;
+  --panel:#0b1008;
+  --neon:#00ff7f;
+  --neon-2:#00c174;
+  --muted:#7fae8a;
+  --card-border: rgba(0,255,127,0.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono",monospace;background:linear-gradient(180deg,var(--bg),#07120a);color:#dfffe0;overflow-x:hidden}
+.container{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+/* main card */
+.card{width:100%;max-width:1100px;background:linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.32));border:1px solid var(--card-border);backdrop-filter: blur(6px);box-shadow:0 30px 90px rgba(0,0,0,0.7);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+/* header */
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.title{font-size:20px;color:var(--neon-2);font-weight:800;letter-spacing:1px}
+.subtitle{font-size:12px;color:var(--muted)}
+/* grid of buttons */
+.toolsGrid{display:grid;gap:12px}
+/* responsive: mobile 1 col, tablet 2, desktop 4 */
+@media (max-width:599px){ .toolsGrid { grid-template-columns: 1fr; } }
+@media (min-width:600px) and (max-width:899px){ .toolsGrid { grid-template-columns: repeat(2,1fr); } }
+@media (min-width:900px){ .toolsGrid { grid-template-columns: repeat(4,1fr); } }
+
+.toolBtn{
+  display:flex;align-items:center;justify-content:center;padding:18px;border-radius:10px;background:linear-gradient(90deg, rgba(0,255,127,0.08), rgba(0,193,116,0.06));border:1px solid rgba(0,255,127,0.06);color:#021005;font-weight:800;text-decoration:none;cursor:pointer;transition:transform .12s, box-shadow .12s;
+  min-height:64px;text-align:center;
+}
+.toolBtn:hover{ transform:translateY(-6px); box-shadow:0 8px 30px rgba(0,255,127,0.06) }
+.toolLabel{color:var(--neon);font-weight:900;font-size:15px}
+
+/* footer area */
+.foot{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.info{font-size:12px;color:var(--muted)}
+
+/* trademark + dot bottom-right */
+.trademarkWrap{position:fixed;right:18px;bottom:10px;z-index:9999;display:flex;align-items:center;gap:8px;pointer-events:auto}
+.trademark{font-size:12px;color:var(--muted);opacity:0.95}
+.dotDecor{
+  width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;color:var(--muted);font-size:12px;border:1px solid rgba(255,255,255,0.02);padding-bottom:1px;
+}
+
+/* subtle responsive tweaks */
+@media (max-width:500px){
+  .toolBtn{padding:14px}
+  .title{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="card" role="main" aria-live="polite">
+    <div class="header">
+      <div>
+        <div class="title">MR A B H I  — Tools</div>
+        <div class="subtitle" aria-hidden="true"></div>
+      </div>
+      <div class="subtitle" aria-hidden="true"></div>
+    </div>
+
+    <!-- Tools grid -->
+    <div id="toolsGrid" class="toolsGrid" role="list" aria-label="tools list">
+      <!-- Buttons injected by JS -->
+    </div>
+
+    <div class="foot" aria-hidden="true">
+      <div class="info"></div>
+      <div class="info"></div>
+    </div>
+  </div>
+</div>
+
+<!-- trademark + dot (decorative only) -->
+<div class="trademarkWrap" aria-hidden="true">
+  <div class="trademark">Copyright reserved 2025 MR WEIRDOO ©</div>
+  <div class="dotDecor">•</div>
+</div>
+
+<script>
+/* Simple tools page - only the 3 tools requested.
+   No admin panel, no hints, no storage. Just buttons. */
+
+const tools = [
+  { name: 'OSINT TOOLS', href: '/osint.html' }
+
+];
+
+const grid = document.getElementById('toolsGrid');
+
+function createTile(t){
+  const a = document.createElement('a');
+  a.className = 'toolBtn';
+  a.href = t.href || '#';
+  a.setAttribute('role','listitem');
+  a.setAttribute('aria-label', t.name);
+  a.innerHTML = `<div class="toolLabel">${escapeHtml(t.name)}</div>`;
+  // open same tab
+  a.addEventListener('click', (e)=>{ /* default navigation */ });
+  return a;
+}
+
+function render(){
+  grid.innerHTML = '';
+  tools.forEach(t => grid.appendChild(createTile(t)));
+}
+function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+render();
+</script>
+</body>
+</html>
