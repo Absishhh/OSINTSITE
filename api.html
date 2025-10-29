@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin API Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: rgba(25, 25, 35, 0.95);
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h2 {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .login-section {
+            display: block;
+        }
+        
+        .api-section {
+            display: none;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #333344;
+            border-radius: 10px;
+            background: #1a1a2e;
+            color: #ffffff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #1e1e3a;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: linear-gradient(45deg, #5a6fd8, #6a4190);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #333344;
+            color: #ffffff;
+        }
+        
+        .btn-secondary:hover {
+            background: #444455;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .status-message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .status-success {
+            background: rgba(40, 167, 69, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.5);
+            color: #28a745;
+        }
+        
+        .status-error {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.5);
+            color: #dc3545;
+        }
+        
+        .status-info {
+            background: rgba(23, 162, 184, 0.2);
+            border: 1px solid rgba(23, 162, 184, 0.5);
+            color: #17a2b8;
+        }
+        
+        .result-section {
+            margin-top: 25px;
+        }
+        
+        .result-section h3 {
+            color: #e0e0e0;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        pre {
+            background: #1a1a2e;
+            border: 1px solid #333344;
+            border-radius: 10px;
+            padding: 16px;
+            color: #28a745;
+            font-size: 13px;
+            line-height: 1.4;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            text-align: left;
+        }
+        
+        .user-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div class="container login-section" id="loginSection">
+        <div class="header">
+            <h2>🔐 Admin Login</h2>
+            <p>Enter your credentials to access the API panel</p>
+        </div>
+
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" placeholder="Enter username" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter password" required>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="login()">Login</button>
+        </div>
+
+        <div id="loginStatus" class="status-message hidden"></div>
+    </div>
+
+    <!-- API Section -->
+    <div class="container api-section" id="apiSection">
+        <div class="header">
+            <h2>🚀 API Proxy Panel</h2>
+            <p>Make requests to your ngrok API</p>
+        </div>
+
+        <div class="user-info">
+            <p>Logged in as: <strong id="currentUser">@iammrweirdo</strong></p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="input-group">
+            <label for="apiType">API Type</label>
+            <select id="apiType" onchange="updatePlaceholder()">
+                <option value="upiinfo">UPI Info</option>
+                <option value="vh">VH</option>
+                <option value="num">Number</option>
+                <option value="adhar">Aadhar</option>
+                <option value="imei">IMEI</option>
+                <option value="pak">PAK</option>
+                <option value="ifsc">IFSC</option>
+                <option value="ip">IP</option>
+                <option value="pwned">Pwned</option>
+                <option value="like">Like</option>
+                <option value="fb">Facebook</option>
+                <option value="bomb">Bomb</option>
+                <option value="stop">Stop</option>
+                <option value="tg">Telegram</option>
+                <option value="familyinfo">Family Info</option>
+                <option value="familyinfo2">Family Info 2</option>
+                <option value="reset">Reset</option>
+                <option value="pan">PAN</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="searchTerm">Search Term</label>
+            <input type="text" id="searchTerm" placeholder="Enter search term..." required>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="makeApiRequest()">Make API Request</button>
+            <button class="btn-secondary" onclick="clearResults()">Clear</button>
+        </div>
+
+        <div id="apiStatus" class="status-message hidden"></div>
+
+        <div class="result-section">
+            <h3>API Response</h3>
+            <pre id="apiResponse">Response will appear here...</pre>
+        </div>
+    </div>
+
+    <script>
+        const VALID_USERNAME = "@iammrweirdo";
+        const VALID_PASSWORD = "@YUSH098";
+
+        function showStatus(message, type = 'info', elementId = 'apiStatus') {
+            const statusEl = document.getElementById(elementId);
+            statusEl.textContent = message;
+            statusEl.className = `status-message status-${type}`;
+            statusEl.classList.remove('hidden');
+            
+            if (type !== 'error') {
+                setTimeout(() => {
+                    statusEl.classList.add('hidden');
+                }, 5000);
+            }
+        }
+
+        function hideStatus(elementId = 'apiStatus') {
+            document.getElementById(elementId).classList.add('hidden');
+        }
+
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                showStatus('Please enter both username and password', 'error', 'loginStatus');
+                return;
+            }
+
+            if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+                // Store login state
+                localStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('adminUsername', username);
+                
+                // Show API section
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('apiSection').style.display = 'block';
+                document.getElementById('currentUser').textContent = username;
+                
+                showStatus('Login successful!', 'success');
+            } else {
+                showStatus('Invalid username or password', 'error', 'loginStatus');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('adminUsername');
+            document.getElementById('apiSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            clearResults();
+        }
+
+        function updatePlaceholder() {
+            const type = document.getElementById('apiType').value;
+            const termInput = document.getElementById('searchTerm');
+            
+            const placeholders = {
+                'upiinfo': 'rahul@upi',
+                'num': '9876543210',
+                'adhar': '1234 5678 9012',
+                'imei': '123456789012345',
+                'ifsc': 'SBIN0000001',
+                'ip': '192.168.1.1',
+                'pwned': 'email@example.com',
+                'fb': 'facebook_username',
+                'tg': 'telegram_username',
+                'pan': 'ABCDE1234F'
+            };
+            
+            termInput.placeholder = placeholders[type] || 'Enter search term...';
+        }
+
+        async function makeApiRequest() {
+            const type = document.getElementById('apiType').value;
+            const term = document.getElementById('searchTerm').value.trim();
+
+            if (!term) {
+                showStatus('Please enter a search term', 'error');
+                return;
+            }
+
+            showStatus('Making API request...', 'info');
+            document.getElementById('startBtn').disabled = true;
+
+            try {
+                // Test the ngrok API directly first to see what we get
+                const testUrl = `https://daphine-unconstraining-lenora.ngrok-free.dev/api?key=key20&type=${type}&term=${encodeURIComponent(term)}`;
+                
+                console.log('Making request to:', testUrl);
+                
+                const response = await fetch(testUrl, {
+                    method: 'GET',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                        'ngrok-skip-browser-warning': 'true',
+                        'Accept': 'application/json, text/plain, */*'
+                    }
+                });
+
+                // Get the response as text first
+                const responseText = await response.text();
+                console.log('Raw response:', responseText.substring(0, 200));
+
+                let data;
+                
+                // Check if it's the ngrok warning page
+                if (responseText.includes('ngrok.com') || responseText.includes('The page') || responseText.trim().startsWith('<!DOCTYPE')) {
+                    data = {
+                        error: 'NGROK_WARNING_PAGE',
+                        message: 'Ngrok warning page detected. The API might be blocked.',
+                        raw_html: responseText.substring(0, 500)
+                    };
+                } else {
+                    // Try to parse as JSON
+                    try {
+                        data = JSON.parse(responseText);
+                    } catch (parseError) {
+                        // If it's not JSON, return the raw text
+                        data = {
+                            raw_response: responseText,
+                            note: 'Response was not valid JSON'
+                        };
+                    }
+                }
+
+                // Display the response
+                document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
+                showStatus('Request completed!', 'success');
+
+            } catch (error) {
+                console.error('API Error:', error);
+                showStatus('Error: ' + error.message, 'error');
+                document.getElementById('apiResponse').textContent = 'Error Details:\n' + error.message + '\n\nStack: ' + error.stack;
+            } finally {
+                document.getElementById('startBtn').disabled = false;
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('searchTerm').value = '';
+            document.getElementById('apiResponse').textContent = 'Response will appear here...';
+            hideStatus();
+        }
+
+        // Check if user is already logged in
+        function checkLogin() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            if (isLoggedIn === 'true') {
+                const username = localStorage.getItem('adminUsername');
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('apiSection').style.display = 'block';
+                document.getElementById('currentUser').textContent = username;
+            }
+        }
+
+        // Enter key support
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('loginSection').style.display !== 'none') {
+                    login();
+                } else {
+                    makeApiRequest();
+                }
+            }
+        });
+
+        // Initialize
+        checkLogin();
+        updatePlaceholder();
+    </script>
+</body>
+</html>
